@@ -34,12 +34,33 @@ Encerra a execução do script.
 
 ---
 
+## Melhorias Recentes
+
+### 1. **Validação de Entradas**
+- Foi adicionada a função `:validate_input` para validar entradas do usuário, garantindo que campos obrigatórios não estejam vazios.
+- Mensagens informativas orientam o usuário em caso de entradas inválidas.
+
+### 2. **Tratamento Centralizado de Erros**
+- A função `:error_message` centraliza mensagens de erro e permite retornar ao menu ou repetir a operação em caso de falha.
+
+### 3. **Listagem de Emuladores Android Melhorada**
+- O script agora verifica se existem emuladores Android configurados antes de listá-los.
+- Exibe uma mensagem clara se nenhum emulador for encontrado.
+
+### 4. **Mensagens Informativas**
+- As mensagens exibidas ao usuário foram melhoradas, incluindo dicas de resolução de problemas.
+
+### 5. **Fluxo de Execução Otimizado**
+- O fluxo do script foi reorganizado para evitar duplicidade de código e melhorar a manutenção.
+
+---
+
 ## Notas Importantes
 
 - **Verificações**: O script verifica se o Node.js e a Expo CLI estão instalados antes de executar as funções principais.
 - **Diretório Padrão**: Se a pasta `C:\ProjetosExpo` não existir, o script cria automaticamente esse diretório para armazenar os projetos.
 - **Nome do Utilizador**: O script obtém automaticamente o nome do utilizador do sistema para personalização.
-- **Interação**: O utilizador pode navegar entre as opções e voltar ao menu principal sempre que necessário.
+- **Interação**: O usuário pode navegar entre as opções e voltar ao menu principal sempre que necessário.
 
 ---
 
@@ -78,9 +99,9 @@ ____________________________________________
 
 ## Instruções de Instalação e Uso
 
-1. **Guarda o ficheiro** com o nome `expo_manager.bat`.
-2. **Executa o ficheiro** clicando duas vezes nele.
-3. **Segue as instruções** apresentadas no menu.
+1. **Guarde o arquivo** com o nome `expo_manager.bat`.
+2. **Execute o arquivo** clicando duas vezes nele.
+3. **Siga as instruções** apresentadas no menu.
 
 ---
 
@@ -92,4 +113,5 @@ ____________________________________________
 **Nota**: Pode fazer modificações ao script e subir para o repositório conforme necessário.
 
 ---
+
 
