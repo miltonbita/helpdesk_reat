@@ -1,0 +1,112 @@
+# Documentação do Script `expo_manager.sh`
+
+## Introdução
+
+O `expo_manager.sh` é um script criado para facilitar a criação e o gerenciamento de projetos React Native com o Expo em ambientes Linux. Ele oferece um menu interativo para criar projetos Expo, iniciar o servidor Expo e gerenciar emuladores Android.
+
+## Funcionalidades Principais
+
+### 1. **Criar Projeto Expo**
+
+Cria um projeto Expo normal no diretório padrão definido no script.
+
+- **Comando Executado**: `npx create-expo-app@latest <nome-do-projeto>`
+- **Diretório Padrão**: `~/ProjetosExpo`
+
+### 2. **Criar Projeto Expo Vazio**
+
+Cria um projeto Expo usando o template "blank" (projeto vazio).
+
+- **Comando Executado**: `npx create-expo-app@latest <nome-do-projeto> --template blank`
+- **Diretório Padrão**: `~/ProjetosExpo`
+
+### 3. **Iniciar Servidor Expo**
+
+Inicia o servidor Expo para o projeto atual.
+
+- **Comando Executado**: `npx expo start`
+- **Diretório Padrão**: `~/ProjetosExpo`
+
+### 4. **Iniciar Emulador Android**
+
+Lista os emuladores Android configurados no sistema e permite ao usuário escolher qual iniciar.
+
+- **Comando Executado**: `<caminho-do-emulador> -avd <nome-do-emulador>`
+- **Caminho Padrão**: `~/Android/Sdk/emulator/emulator`
+
+### 5. **Sair**
+
+Encerra a execução do script.
+
+---
+
+## Notas Importantes
+
+- **Verificações**: O script verifica se o Node.js e a Expo CLI estão instalados antes de executar as funções principais.
+- **Diretório Padrão**: Se a pasta `~/ProjetosExpo` não existir, o script a cria automaticamente para armazenar os projetos.
+- **Interação**: O usuário pode navegar entre as opções e voltar ao menu principal sempre que necessário.
+
+---
+
+## Exemplo de Execução
+
+Quando o script é iniciado, o menu apresenta-se da seguinte forma:
+
+```
+==========================================
+     BEM-VINDO, $USER, AO GERENCIADOR EXPO
+==========================================
+1. Criar Projeto Expo
+2. Criar Projeto Expo Vazio
+3. Iniciar Servidor Expo
+4. Iniciar Emulador Android
+5. Sair
+==========================================
+
+____________________________________________
+
+   Autor: Milton Bita
+   GitHub: https://github.com/MiltonBita
+_____________________________________________
+   Colaborador: Rafael Vicente
+   https://github.com/RafaelVicen
+   
+   Nota: Pode fazer modificacoes e subir para o repositório.
+____________________________________________
+```
+
+---
+
+## Requisitos do Sistema
+
+- **Node.js** instalado
+- **Expo CLI** instalado (pode ser instalado com `npm install -g expo-cli`)
+- **Android Emulator** configurado
+
+---
+
+## Instruções de Instalação e Uso
+
+1. **Guarde o arquivo** com o nome `expo_manager.sh`.
+2. **Dê permissão de execução**: `chmod +x expo_manager.sh`.
+3. **Execute o script** com o comando: `./expo_manager.sh`.
+4. **Siga as instruções** apresentadas no menu.
+
+---
+
+## Contacto
+
+**   Autor: Milton Bita**
+
+&#x20;  GitHub: https\://github.com/MiltonBita
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+&#x20;  Colaborador: Rafael Vicente
+
+&#x20;  https\://github.com/RafaelVicen
+
+&#x20;  **Nota**: Pode fazer modificações ao script e subir para o repositório conforme necessário.
+
+---
+
