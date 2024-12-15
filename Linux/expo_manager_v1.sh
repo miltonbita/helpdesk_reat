@@ -1,142 +1,125 @@
 #!/bin/bash
-# Gerenciador React Native Expo para Linux
-# Autor: Rafael Vicente
-# GitHub: https://github.com/RafaelVicen
-# Nota: Pode fazer modificações e subir para o repositório.
 
 # Caminhos padrão
-ANDROID_EMULATOR="$HOME/Android/Sdk/emulator/emulator"
-PROJECT_DIR="$HOME/ProjetosExpo"
+PROJECTS_DIR="$HOME/ProjetosExpo"
+ANDROID_EMULATOR_PATH="$HOME/Android/Sdk/emulator/emulator"
 
-# Criar diretório padrão para projetos se não existir
-if [ ! -d "$PROJECT_DIR" ]; then
-  mkdir -p "$PROJECT_DIR"
-fi
+# Função para criar diretório se não existir
+create_directory() {
+    if [ ! -d "$1" ]; then
+        mkdir -p "$1"
+        echo "Diretório $1 criado."
+    fi
+}
 
-# Verificar se Node.js está instalado
-if ! command -v node &> /dev/null; then
-  echo "Node.js não encontrado. Por favor, instale o Node.js para continuar."
-  exit 1
-fi
+# Função para verificar dependências
+check_dependencies() {
+    if ! command -v node &> /dev/null; then
+        echo "Node.js não está instalado. Por favor, instale o Node.js para continuar."
+        exit 1
+    fi
 
-# Verificar se Expo CLI está instalada
-if ! command -v npx &> /dev/null; then
-  echo "Expo CLI não encontrada. Por favor, instale com 'npm install -g expo-cli'."
-  exit 1
-fi
+    if ! command -v npx &> /dev/null; then
+        echo "NPX não está instalado. Por favor, instale o Node.js corretamente para continuar."
+        exit 1
+    fi
+}
+
+# Função para criar um projeto Expo
+create_expo_project() {
+    echo "Digite o nome do projeto:"
+    read project_name
+    if [ -z "$project_name" ]; then
+        echo "Nome do projeto não pode ser vazio."
+        return
+    fi
+    cd "$PROJECTS_DIR" || exit
+    npx create-expo-app@latest "$project_name"
+    echo "Projeto $project_name criado com sucesso!"
+}
+
+# Função para criar um projeto Expo vazio
+create_blank_project() {
+    echo "Digite o nome do projeto:"
+    read project_name
+    if [ -z "$project_name" ]; then
+        echo "Nome do projeto não pode ser vazio."
+        return
+    fi
+    cd "$PROJECTS_DIR" || exit
+    npx create-expo-app@latest "$project_name" --template blank
+    echo "Projeto vazio $project_name criado com sucesso!"
+}
+
+# Função para iniciar o servidor Expo
+start_expo_server() {
+    echo "Digite o nome do projeto para iniciar o servidor:"
+    read project_name
+    if [ -z "$project_name" ]; then
+        echo "Nome do projeto não pode ser vazio."
+        return
+    fi
+    cd "$PROJECTS_DIR/$project_name" || {
+        echo "Projeto não encontrado.";
+        return;
+    }
+    npx expo start
+}
+
+# Função para iniciar o emulador Android
+start_android_emulator() {
+    if [ ! -f "$ANDROID_EMULATOR_PATH" ]; then
+        echo "Emulador Android não encontrado no caminho $ANDROID_EMULATOR_PATH."
+        echo "Deseja instalar e configurar o Android SDK agora? (s/n)"
+        read install_choice
+        if [[ "$install_choice" == "s" || "$install_choice" == "S" ]]; then
+            echo "Instalando dependências necessárias..."
+            sudo apt update && sudo apt install -y android-sdk
+            echo "Certifique-se de configurar o caminho do SDK em \$HOME/Android/Sdk."
+        else
+            echo "Por favor, configure o Android SDK manualmente antes de continuar."
+        fi
+        return
+    fi
+
+    echo "Lista de emuladores disponíveis:"
+    "$ANDROID_EMULATOR_PATH" -list-avds
+    echo "Digite o nome do emulador para iniciar:"
+    read emulator_name
+    if [ -z "$emulator_name" ]; then
+        echo "Nome do emulador não pode ser vazio."
+        return
+    fi
+    "$ANDROID_EMULATOR_PATH" -avd "$emulator_name"
+}
 
 # Menu principal
-while true; do
-  clear
-  echo "==========================================="
-  echo "     BEM-VINDO, $USER, AO GERENCIADOR EXPO"
-  echo "==========================================="
-  echo "1. Criar Projeto Expo"
-  echo "2. Criar Projeto Expo Vazio"
-  echo "3. Iniciar Servidor Expo"
-  echo "4. Iniciar Emulador Android"
-  echo "5. Sair"
-  echo "==========================================="
-  echo ""
+show_menu() {
+    while true; do
+        clear
+        echo "=========================================="
+        echo "  BEM-VINDO AO GERENCIADOR EXPO"
+        echo "=========================================="
+        echo "1. Criar Projeto Expo"
+        echo "2. Criar Projeto Expo Vazio"
+        echo "3. Iniciar Servidor Expo"
+        echo "4. Iniciar Emulador Android"
+        echo "5. Sair"
+        echo "=========================================="
+        echo "Digite uma opção:"
+        read option
 
-  read -p "Escolha uma opção (1-5): " choice
+        case $option in
+            1) create_directory "$PROJECTS_DIR"; create_expo_project ;;
+            2) create_directory "$PROJECTS_DIR"; create_blank_project ;;
+            3) start_expo_server ;;
+            4) start_android_emulator ;;
+            5) echo "Saindo..."; exit ;;
+            *) echo "Opção inválida!"; sleep 2 ;;
+        esac
+    done
+}
 
-  case $choice in
-    1) # Criar Projeto Expo
-      clear
-      echo "==========================================="
-      echo "       CRIAR UM NOVO PROJETO EXPO"
-      echo "==========================================="
-      read -p "Nome do projeto: " projectName
-      if [ -z "$projectName" ]; then
-        echo "Nome inválido. Tente novamente."
-        read -p "Pressione Enter para continuar..."
-        continue
-      fi
-      cd "$PROJECT_DIR"
-      npx create-expo-app@latest "$projectName"
-      if [ $? -ne 0 ]; then
-        echo "Erro ao criar o projeto."
-      else
-        echo "Projeto criado com sucesso em $PROJECT_DIR/$projectName!"
-      fi
-      read -p "Pressione Enter para continuar..."
-      ;;
-    2) # Criar Projeto Expo Vazio
-      clear
-      echo "==========================================="
-      echo "    CRIAR UM NOVO PROJETO EXPO VAZIO"
-      echo "==========================================="
-      read -p "Nome do projeto: " projectName
-      if [ -z "$projectName" ]; then
-        echo "Nome inválido. Tente novamente."
-        read -p "Pressione Enter para continuar..."
-        continue
-      fi
-      cd "$PROJECT_DIR"
-      npx create-expo-app@latest "$projectName" --template blank
-      if [ $? -ne 0 ]; then
-        echo "Erro ao criar o projeto vazio."
-      else
-        echo "Projeto vazio criado com sucesso em $PROJECT_DIR/$projectName!"
-      fi
-      read -p "Pressione Enter para continuar..."
-      ;;
-    3) # Iniciar Servidor Expo
-      clear
-      echo "==========================================="
-      echo "        INICIAR O SERVIDOR EXPO"
-      echo "==========================================="
-      cd "$PROJECT_DIR"
-      npx expo start
-      read -p "Pressione Enter para continuar..."
-      ;;
-    4) # Iniciar Emulador Android
-      clear
-      echo "==========================================="
-      echo "       INICIAR EMULADOR ANDROID"
-      echo "==========================================="
-      available_emulators=($($ANDROID_EMULATOR -list-avds))
-      if [ ${#available_emulators[@]} -eq 0 ]; then
-        echo "Nenhum emulador encontrado. Verifique suas configurações no Android Studio."
-        read -p "Pressione Enter para continuar..."
-        continue
-      fi
-
-      echo "Emuladores disponíveis:"
-      for i in "${!available_emulators[@]}"; do
-        echo "$((i+1)). ${available_emulators[$i]}"
-      done
-
-      read -p "Escolha o número do emulador (ou 0 para voltar): " emulatorChoice
-
-      if [ "$emulatorChoice" -eq 0 ]; then
-        continue
-      fi
-
-      if [ "$emulatorChoice" -lt 1 ] || [ "$emulatorChoice" -gt ${#available_emulators[@]} ]; then
-        echo "Opção inválida. Tente novamente."
-        read -p "Pressione Enter para continuar..."
-        continue
-      fi
-
-      selectedEmulator=${available_emulators[$((emulatorChoice-1))]}
-      $ANDROID_EMULATOR -avd "$selectedEmulator"
-      if [ $? -ne 0 ]; then
-        echo "Erro ao iniciar o emulador. Verifique o nome e tente novamente."
-      else
-        echo "Emulador iniciado com sucesso!"
-      fi
-      read -p "Pressione Enter para continuar..."
-      ;;
-    5) # Sair
-      echo "Obrigado por usar o Gerenciador Expo, $USER!"
-      exit 0
-      ;;
-    *)
-      echo "Opção inválida. Tente novamente."
-      read -p "Pressione Enter para continuar..."
-      ;;
-  esac
-
-done
+# Início do script
+check_dependencies
+show_menu
